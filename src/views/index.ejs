@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=title%></title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh;
+            gap: 20px; 
+            padding: 20px; 
+            box-sizing: border-box;
+        }
+
+        .text-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-right: 20px;
+        }
+
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 5px;
+            max-width: 400px;
+        }
+
+        .calculator input[type="button"] {
+            padding: 10px;
+            font-size: 1.2em;
+        }
+
+        .result {
+            grid-column: span 4;
+            text-align: center;
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-fields">
+            <input type="text" id="entrada" name="entrada de numeros" value="" class="result">
+            <input type="button" value="Calcular resultado" class="result">
+            <label>Resultado: </label>
+            <input type="text" value="" class="result">
+            <label>memoria: </label>
+            <input type="text" name="estado de la memoria:">
+            <input type="button" value="Consultar memoria" class="result">
+            <label class="result">Selecciona la base del resultado:</label>
+            <select class="result">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+            </select>
+            <input type="button" id="cambiar" value="Cambiar">
+        </div>
+        <div class="calculator">
+            <input type="button" value="(" class="calc-btn">
+            <input type="button" value=")" class="calc-btn">
+            <input type="button" value="_" class="calc-btn">
+            <input type="button" value="/" class="calc-btn">
+            <input type="button" value="7" class="calc-btn">
+            <input type="button" value="8" class="calc-btn">
+            <input type="button" value="9" class="calc-btn">
+            <input type="button" value="+" class="calc-btn">
+            <input type="button" value="4" class="calc-btn">
+            <input type="button" value="5" class="calc-btn">
+            <input type="button" value="6" class="calc-btn">
+            <input type="button" value="-" class="calc-btn">
+            <input type="button" value="1" class="calc-btn">
+            <input type="button" value="2" class="calc-btn">
+            <input type="button" value="3" class="calc-btn">
+            <input type="button" value="*" class="calc-btn">
+            <input type="button" value="0" class="calc-btn" style="grid-column: span 2;">
+            <input type="button" value="A" class="calc-btn">
+            <input type="button" value="B" class="calc-btn">
+            <input type="button" value="C" class="calc-btn">
+            <input type="button" value="D" class="calc-btn">
+            <input type="button" value="E" class="calc-btn">
+            <input type="button" value="F" class="calc-btn">
+        </div>
+    </div>
+
+    <script>
+    
+        const entrada = document.getElementById('entrada');
+        const buttons = document.querySelectorAll('.calc-btn');
+
+        
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                entrada.value += button.value; 
+            });
+        });
+    </script>
+</body>
+</html>
