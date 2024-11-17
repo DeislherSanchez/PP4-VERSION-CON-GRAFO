@@ -3,6 +3,7 @@
 
 #include "/home/jahir/Documents/PP4/SRC/main/String.hpp"
 #include "/home/jahir/Documents/PP4/SRC/main/Tareas.hpp"
+#include "/home/jahir/Documents/PP4/SRC/main/GrafoTareas.hpp"
 #include <regex>
 #include <gtkmm.h>
 
@@ -170,7 +171,6 @@ VentanaPrincipal::VentanaPrincipal() : tareas(nullptr), cantidadTareas(0) {
     set_title("Gestor de Tareas y Proyectos");
     set_default_size(1000, 800);
     set_resizable(false);
-
     frame_principal.set_label("Gestor de Tareas");
     frame_principal.set_margin(20);
     etiqueta_bienvenida.set_text("Bienvenido al Gestor de Tareas y Proyectos");
@@ -403,12 +403,15 @@ VentanaPrincipal::~VentanaPrincipal() {
 
 
 
-
 void VentanaPrincipal::crear_frame_tarea() {
+    std::cout << "Entrando a crear_frame_tarea" << std::endl;
+    grafo.mostrarGrafo(); // Llamada a mostrarGrafo
+    std::cout << "Terminó mostrarGrafo" << std::endl;
     frame_principal.hide();
     set_child(frame_tarea);
     frame_tarea.show();
 }
+
 
 void VentanaPrincipal::regresar_frame_tarea() {
     frame_tarea.hide();
@@ -651,7 +654,7 @@ void VentanaPrincipal::agregar_tarea() {
         delete[] lista_recursos;
 
         grafo.agregarTarea(nuevaTarea);
-        grafo.mostrarGrafo();
+        grafo.mostrarGrafo(); // Llamada a mostrarGrafo
         Tarea** nuevasTareas = new Tarea*[cantidadTareas + 1];
         for (int i = 0; i < cantidadTareas; i++) {
             nuevasTareas[i] = tareas[i];
@@ -662,7 +665,7 @@ void VentanaPrincipal::agregar_tarea() {
         cantidadTareas++;
 
         std::cout << "Tarea agregada con éxito:" << std::endl;
-        std::cout << "Nombre: " << nombre.mostrarCadena() << std::endl;
+        std::cout << "Nombre de la tarea: " << nombre.mostrarCadena() << std::endl;
         std::cout << "Duración: " << duracion << " horas" << std::endl;
         std::cout << "Recursos: ";
         for (int j = 0; j < nuevaTarea->getCantidadRecursos(); j++) {
