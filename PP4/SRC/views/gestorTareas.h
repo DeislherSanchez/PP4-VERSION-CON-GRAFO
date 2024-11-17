@@ -42,12 +42,12 @@ private:
     }
 
 public:
-    // Constructor y destructor
+
     VentanaPrincipal();
     virtual ~VentanaPrincipal();
 
 protected:
-    // Métodos relacionados con la navegación de frames
+
     void crear_frame_tarea();
     void regresar_frame_tarea();
     void crear_frame_eliminar_tarea();
@@ -194,13 +194,13 @@ VentanaPrincipal::VentanaPrincipal() : tareas(nullptr), cantidadTareas(0) {
     boton_crear_frame_dependencias_tareas.set_size_request(800,50);
     boton_crear_frame_ver_tareas.set_size_request(800, 50);
     boton_terminar_programa.set_size_request(800, 50);
-    contenedor_principal.put(etiqueta_bienvenida, 100, 50);
-    contenedor_principal.put(boton_crear_frame_tarea, 100, 125);
-    contenedor_principal.put(boton_crear_frame_eliminar_tarea, 100, 225);
+    contenedor_principal.put(etiqueta_bienvenida, 100, 100);
+    contenedor_principal.put(boton_crear_frame_tarea, 100, 175);
+    contenedor_principal.put(boton_crear_frame_eliminar_tarea, 100, 250);
     contenedor_principal.put(boton_crear_frame_editar_tarea, 100, 325);
-    contenedor_principal.put(boton_crear_frame_dependencias_tareas,100,425);
-    contenedor_principal.put(boton_crear_frame_ver_tareas, 100, 525);
-    contenedor_principal.put(boton_terminar_programa, 100, 625);
+    contenedor_principal.put(boton_crear_frame_dependencias_tareas,100,400);
+    contenedor_principal.put(boton_crear_frame_ver_tareas, 100, 475);
+    contenedor_principal.put(boton_terminar_programa, 100, 550);
     boton_crear_frame_tarea.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::crear_frame_tarea));
     boton_crear_frame_eliminar_tarea.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::crear_frame_eliminar_tarea));
     boton_crear_frame_editar_tarea.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::crear_frame_editar_tarea));
@@ -225,10 +225,10 @@ VentanaPrincipal::VentanaPrincipal() : tareas(nullptr), cantidadTareas(0) {
     boton_regresar_de_tarea.set_label("Regresar");
     boton_regresar_de_tarea.set_size_request(800, 50);
     contenedor_frame_tarea.put(entrada_nombre_tarea, 100, 100);
-    contenedor_frame_tarea.put(entrada_duracion_tarea, 100, 200);
-    contenedor_frame_tarea.put(entrada_recursos_tarea, 100, 300);
-    contenedor_frame_tarea.put(boton_agregar_tarea, 100, 400);
-    contenedor_frame_tarea.put(boton_regresar_de_tarea, 100, 500);
+    contenedor_frame_tarea.put(entrada_duracion_tarea, 100, 175);
+    contenedor_frame_tarea.put(entrada_recursos_tarea, 100, 250);
+    contenedor_frame_tarea.put(boton_agregar_tarea, 100, 325);
+    contenedor_frame_tarea.put(boton_regresar_de_tarea, 100, 400);
     boton_agregar_tarea.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::agregar_tarea));
     boton_regresar_de_tarea.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::regresar_frame_tarea));
     frame_tarea.set_child(contenedor_frame_tarea);
@@ -283,10 +283,10 @@ VentanaPrincipal::VentanaPrincipal() : tareas(nullptr), cantidadTareas(0) {
     boton_regresar_de_edicion_tarea.set_label("Regresar");
     boton_regresar_de_edicion_tarea.set_size_request(800,50);
     contenedor_edicion_tarea.put(boton_editar_nombre,100,100);
-    contenedor_edicion_tarea.put(boton_editar_duracion,100,200);
-    contenedor_edicion_tarea.put(boton_editar_recursos,100,300);
-    contenedor_edicion_tarea.put(boton_add_recursos,100,400);
-    contenedor_edicion_tarea.put(boton_regresar_de_edicion_tarea,100,500);
+    contenedor_edicion_tarea.put(boton_editar_duracion,100,175);
+    contenedor_edicion_tarea.put(boton_editar_recursos,100,250);
+    contenedor_edicion_tarea.put(boton_add_recursos,100,325);
+    contenedor_edicion_tarea.put(boton_regresar_de_edicion_tarea,100,400);
     boton_editar_nombre.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::crear_frame_editar_nombre_tarea));
     boton_editar_duracion.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::crear_frame_editar_duracion_tarea));
     boton_editar_recursos.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::crear_frame_editar_recursos_tarea));
@@ -379,11 +379,11 @@ VentanaPrincipal::VentanaPrincipal() : tareas(nullptr), cantidadTareas(0) {
     boton_regresar_de_dependencias.set_label("Regresar");
     boton_regresar_de_dependencias.set_size_request(800,50);
     contenedor_dependencias.put(entrada_origen_dependencia,100,100);
-    contenedor_dependencias.put(entrada_destino_dependencia,100,200);
-    contenedor_dependencias.put(boton_agregar_dependencias,100,300);
-    contenedor_dependencias.put(boton_crear_doble_dependencia,100,400);
-    contenedor_dependencias.put(boton_eliminar_dependencias,100,500);
-    contenedor_dependencias.put(boton_regresar_de_dependencias,100,600);
+    contenedor_dependencias.put(entrada_destino_dependencia,100,175);
+    contenedor_dependencias.put(boton_agregar_dependencias,100,250);
+    contenedor_dependencias.put(boton_crear_doble_dependencia,100,325);
+    contenedor_dependencias.put(boton_eliminar_dependencias,100,400);
+    contenedor_dependencias.put(boton_regresar_de_dependencias,100,475);
     boton_agregar_dependencias.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::agregar_depedencias));
     boton_crear_doble_dependencia.signal_clicked().connect(sigc::mem_fun(*this, &VentanaPrincipal::crear_doble_dependencia));
     boton_eliminar_dependencias.signal_clicked().connect(sigc::mem_fun(*this,&VentanaPrincipal::eliminar_dependencias));
