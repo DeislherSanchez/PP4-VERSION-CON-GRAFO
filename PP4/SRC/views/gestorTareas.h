@@ -1037,6 +1037,7 @@ void VentanaPrincipal::agregar_depedencias() {
         dialog->show();
         return;
     }
+
     if (!existeTarea(nombre_origen_dependencia) || !existeTarea(nombre_destino_dependencia)) {
         auto dialog = new Gtk::MessageDialog(*this, "Error: Tareas no encontradas");
         dialog->set_secondary_text("No se encontró ninguna tarea con los nombres ingresados.");
@@ -1047,7 +1048,8 @@ void VentanaPrincipal::agregar_depedencias() {
         });
         dialog->show();
         return;
-    
+    }
+
     String origen = convertir_a_String(nombre_origen_dependencia);
     String destino = convertir_a_String(nombre_destino_dependencia);
 
@@ -1060,6 +1062,7 @@ void VentanaPrincipal::agregar_depedencias() {
             id_destino = i;
         }
     }
+
     if (id_origen == -1 || id_destino == -1) {
         auto dialog = new Gtk::MessageDialog(*this, "Error: IDs no válidos");
         dialog->set_secondary_text("No se pudieron determinar las tareas correctamente.");
@@ -1071,6 +1074,7 @@ void VentanaPrincipal::agregar_depedencias() {
         dialog->show();
         return;
     }
+
     if (grafo.obtenerNodo(id_origen)->existeDependencia(grafo.obtenerNodo(id_destino))) {
         auto dialog = new Gtk::MessageDialog(*this, "Error: Dependencia repetida");
         dialog->set_secondary_text("Ya existe una dependencia entre estas tareas.");
@@ -1108,6 +1112,7 @@ void VentanaPrincipal::agregar_depedencias() {
         dialog->show();
     }
 }
+
 
 
 void VentanaPrincipal::eliminar_dependencias() {
@@ -1163,7 +1168,6 @@ void VentanaPrincipal::eliminar_dependencias() {
         return;
     }
 
-    // Validar si la dependencia existe antes de intentar eliminarla
     if (!grafo.obtenerNodo(id_origen)->existeDependencia(grafo.obtenerNodo(id_destino))) {
         auto dialog = new Gtk::MessageDialog(*this, "Error: Dependencia no encontrada");
         dialog->set_secondary_text("No existe una dependencia entre estas tareas.");
@@ -1201,7 +1205,6 @@ void VentanaPrincipal::eliminar_dependencias() {
         dialog->show();
     }
 }
-
 
 
 void VentanaPrincipal::crear_doble_dependencia() {
