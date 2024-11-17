@@ -80,6 +80,12 @@ public:
             actual = actual->getSiguiente();
         }
     }
+
+
+    NodoLista* getNodos() const {
+        return apNodos;
+    }
+
 };
 
 #endif // GRAFOTAREAS_HPP

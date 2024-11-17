@@ -44,6 +44,8 @@ private:
     void actualizarNombreEnGrafo(const String& nombreOriginal, const String& nuevoNombre);
     void actualizarDuracionEnGrafo(const String& nombre, int nuevaDuracion);
     void actualizarRecursosEnGrafo(const String& nombre, String** nuevosRecursos);
+    void mostrarGrafo();
+
 
 public:
     // Constructor y destructor
@@ -670,6 +672,8 @@ void VentanaPrincipal::agregar_tarea() {
         tareas = nuevasTareas;
         cantidadTareas++;
         grafo.agregarNodo(*nuevaTarea);
+        mostrarGrafo();
+
         std::cout << "Tarea agregada con éxito:" << std::endl;
         std::cout << "Nombre: " << nombre.mostrarCadena() << std::endl;
         std::cout << "Duración: " << duracion << " horas" << std::endl;
@@ -779,6 +783,7 @@ void VentanaPrincipal::editar_nombre() {
         });
         dialog->show();
     }
+    mostrarGrafo();
 }
 
 
@@ -842,6 +847,7 @@ void VentanaPrincipal::editar_duracion() {
             return;
         }
     }
+    mostrarGrafo();
 }
 
 
@@ -885,6 +891,7 @@ void VentanaPrincipal::editar_recursos() {
         delete lista_nuevos_recursos[indice];
         indice++;
     }
+    mostrarGrafo();
     delete[] lista_nuevos_recursos;
 }
 
@@ -953,6 +960,8 @@ void VentanaPrincipal::add_recursos() {
         indice++;
     }
     delete[] lista_add_recursos;
+    mostrarGrafo();
+
 }
 
 
@@ -992,6 +1001,8 @@ void VentanaPrincipal::eliminar_tarea() {
     }
     if (indice != -1) {
         grafo.eliminarNodo(tareas[indice]->getId());
+        mostrarGrafo();
+
         delete tareas[indice];
         for (int i = indice; i < cantidadTareas - 1; ++i) {
             tareas[i] = tareas[i + 1];
@@ -1064,6 +1075,31 @@ void VentanaPrincipal::eliminar_tarea() {
             nodo->getTarea().setRecursos(nuevosRecursos);
         }
     }
+
+    void VentanaPrincipal::mostrarGrafo() {
+        std::cout << "Estado actual del grafo de tareas:" << std::endl;
+
+        NodoLista* actual = grafo.getNodos(); // Acceder al inicio de la lista de nodos
+        while (actual) {
+            NodoTarea& nodo = actual->getTarea();
+            Tarea& tarea = nodo.getTarea();
+
+            std::cout << "Tarea: " << tarea.getNombre().mostrarCadena() << std::endl;
+            std::cout << "Duración: " << tarea.getDuracion() << " horas" << std::endl;
+            std::cout << "Recursos: ";
+            for (int i = 0; i < tarea.getCantidadRecursos(); ++i) {
+                std::cout << tarea.getRecursos()[i]->mostrarCadena();
+                if (i < tarea.getCantidadRecursos() - 1) {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << std::endl;
+            std::cout << std::endl << "--------------------------" << std::endl;
+
+            actual = actual->getSiguiente();
+        }
+    }
+
 
 //------------------------------------------------------------------Auxiliar----------------------------//
 
