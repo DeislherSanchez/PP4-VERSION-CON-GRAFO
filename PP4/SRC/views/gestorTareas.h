@@ -8,12 +8,11 @@
 
 class VentanaPrincipal : public Gtk::Window {
 private:
-    // Atributos principales
+    
+    GrafoDeTareas grafo;
     Tarea** tareas;
     int cantidadTareas;
-    GrafoTareas grafo;
-
-    // Métodos privados para validaciones
+  
     bool validar_datos_tarea(const Glib::ustring& nombre_tarea, 
                              const Glib::ustring& duracion_tarea, 
                              const Glib::ustring& recursos_tarea, 
@@ -40,12 +39,6 @@ private:
         }
         return false;
     }
-    void establecerDependencia(int idOrigen, int idDestino, int peso);
-    void actualizarNombreEnGrafo(const String& nombreOriginal, const String& nuevoNombre);
-    void actualizarDuracionEnGrafo(const String& nombre, int nuevaDuracion);
-    void actualizarRecursosEnGrafo(const String& nombre, String** nuevosRecursos);
-    void mostrarGrafo();
-
 
 public:
     // Constructor y destructor
@@ -626,13 +619,6 @@ bool VentanaPrincipal::validar_recursos(const Glib::ustring& recursos_tarea, std
 
 //----------------------------------------------Funciones escenciales--------------------------------------//
 
-
-    void VentanaPrincipal::establecerDependencia(int idOrigen, int idDestino, int peso) {
-        grafo.agregarArista(idOrigen, idDestino, peso);
-    }
-
-
-
 void VentanaPrincipal::agregar_tarea() {
     Glib::ustring nombre_tarea = entrada_nombre_tarea.get_text();
     Glib::ustring duracion_tarea = entrada_duracion_tarea.get_text();
@@ -650,11 +636,11 @@ void VentanaPrincipal::agregar_tarea() {
         dialog->show();
         return;
     }
-
     try {
         String nombre = convertir_a_String(nombre_tarea);
         int duracion = std::stoi(duracion_tarea.raw());
         Tarea* nuevaTarea = new Tarea(nombre, duracion);
+
         String recursos = convertir_a_String(recursos_tarea);
         String** lista_recursos = recursos.split(',');
         int i = 0;
@@ -663,6 +649,9 @@ void VentanaPrincipal::agregar_tarea() {
             i++;
         }
         delete[] lista_recursos;
+
+        grafo.agregarTarea(nuevaTarea);
+        grafo.mostrarGrafo();
         Tarea** nuevasTareas = new Tarea*[cantidadTareas + 1];
         for (int i = 0; i < cantidadTareas; i++) {
             nuevasTareas[i] = tareas[i];
@@ -671,8 +660,6 @@ void VentanaPrincipal::agregar_tarea() {
         delete[] tareas;
         tareas = nuevasTareas;
         cantidadTareas++;
-        grafo.agregarNodo(*nuevaTarea);
-        mostrarGrafo();
 
         std::cout << "Tarea agregada con éxito:" << std::endl;
         std::cout << "Nombre: " << nombre.mostrarCadena() << std::endl;
@@ -685,6 +672,7 @@ void VentanaPrincipal::agregar_tarea() {
             }
         }
         std::cout << std::endl;
+
         auto dialog = new Gtk::MessageDialog(*this, "¡Tarea agregada con éxito!");
         dialog->set_modal(true);
         dialog->signal_response().connect([dialog](int response_id) {
@@ -706,7 +694,6 @@ void VentanaPrincipal::agregar_tarea() {
         dialog->show();
     }
 }
-
 
 
 
@@ -753,12 +740,10 @@ void VentanaPrincipal::editar_nombre() {
     try {
         String nombre_original = convertir_a_String(nombre_tarea_original);
         String nuevo_nombre = convertir_a_String(nuevo_nombre_tarea);
-
-
         for (int i = 0; i < cantidadTareas; ++i) {
             if (tareas[i]->getNombre() == nombre_original) {
                 tareas[i]->setNombre(nuevo_nombre);
-                actualizarNombreEnGrafo(nombre_original, nuevo_nombre);
+                grafo.obtenerNodo(i)->getTarea()->setNombre(nuevo_nombre);
                 mostrarDatosTarea(tareas[i]);
                 auto dialog = new Gtk::MessageDialog(*this, "¡Nombre actualizado con éxito!");
                 dialog->set_secondary_text("El nombre de la tarea ha sido actualizado correctamente.");
@@ -783,7 +768,6 @@ void VentanaPrincipal::editar_nombre() {
         });
         dialog->show();
     }
-    mostrarGrafo();
 }
 
 
@@ -832,7 +816,7 @@ void VentanaPrincipal::editar_duracion() {
     for (int i = 0; i < cantidadTareas; ++i) {
         if (tareas[i]->getNombre() == nombre_tarea_a_editar) {
             tareas[i]->setDuracion(nueva_duracion_int);
-            actualizarDuracionEnGrafo(nombre_tarea_a_editar, nueva_duracion_int);
+            grafo.obtenerNodo(i)->getTarea()->setDuracion(nueva_duracion_int);
             mostrarDatosTarea(tareas[i]);
             auto dialog = new Gtk::MessageDialog(*this, "¡Duración actualizada con éxito!");
             dialog->set_secondary_text("La duración de la tarea ha sido actualizada correctamente.");
@@ -843,11 +827,10 @@ void VentanaPrincipal::editar_duracion() {
             });
             dialog->show();
 
-            entrada_nueva_duracion_tarea.set_text("")
+            entrada_nueva_duracion_tarea.set_text("");
             return;
         }
     }
-    mostrarGrafo();
 }
 
 
@@ -872,7 +855,7 @@ void VentanaPrincipal::editar_recursos() {
     for (int i = 0; i < cantidadTareas; i++) {
         if (tareas[i]->getNombre() == nombre_tarea_a_editar) {
             tareas[i]->setRecursos(lista_nuevos_recursos);
-            actualizarRecursosEnGrafo(nombre_tarea_a_editar, lista_nuevos_recursos);
+            grafo.obtenerNodo(i)->getTarea()->setRecursos(lista_nuevos_recursos);
             mostrarDatosTarea(tareas[i]);
             auto dialog = new Gtk::MessageDialog(*this, "¡Recursos actualizados con éxito!");
             dialog->set_secondary_text("Los recursos de la tarea han sido actualizados correctamente.");
@@ -891,7 +874,6 @@ void VentanaPrincipal::editar_recursos() {
         delete lista_nuevos_recursos[indice];
         indice++;
     }
-    mostrarGrafo();
     delete[] lista_nuevos_recursos;
 }
 
@@ -933,12 +915,18 @@ void VentanaPrincipal::add_recursos() {
                 nuevaLista[cantidadActual + j] = new String(*lista_add_recursos[j]);
             }
             nuevaLista[cantidadActual + cantidadNuevos] = nullptr;
+
+            // Actualizar los recursos en la tarea
             tareas[i]->setRecursos(nuevaLista);
-            actualizarRecursosEnGrafo(nombre_tarea_a_editar, nuevaLista);
+
+            // Actualizar los recursos en el grafo
+            grafo.obtenerNodo(i)->getTarea()->setRecursos(nuevaLista);
+
             for (int j = 0; j < cantidadActual + cantidadNuevos; j++) {
                 delete nuevaLista[j];
             }
             delete[] nuevaLista;
+
             mostrarDatosTarea(tareas[i]);
 
             auto dialog = new Gtk::MessageDialog(*this, "¡Recurso agregado con éxito!");
@@ -954,16 +942,15 @@ void VentanaPrincipal::add_recursos() {
             break;
         }
     }
+
+    // Liberar memoria de la lista temporal de nuevos recursos
     int indice = 0;
     while (lista_add_recursos[indice] != nullptr) {
         delete lista_add_recursos[indice];
         indice++;
     }
     delete[] lista_add_recursos;
-    mostrarGrafo();
-
 }
-
 
 
 void VentanaPrincipal::eliminar_tarea() {
@@ -980,6 +967,7 @@ void VentanaPrincipal::eliminar_tarea() {
         dialog->show();
         return;
     }
+
     if (!existeTarea(nombre_tarea)) {
         auto dialog = new Gtk::MessageDialog(*this, "Error: Tarea no encontrada");
         dialog->set_secondary_text("No se encontró ninguna tarea con el nombre ingresado.");
@@ -999,11 +987,10 @@ void VentanaPrincipal::eliminar_tarea() {
             break;
         }
     }
-    if (indice != -1) {
-        grafo.eliminarNodo(tareas[indice]->getId());
-        mostrarGrafo();
 
+    if (indice != -1) {
         delete tareas[indice];
+        grafo.eliminarNodo(indice); 
         for (int i = indice; i < cantidadTareas - 1; ++i) {
             tareas[i] = tareas[i + 1];
         }
@@ -1034,7 +1021,6 @@ void VentanaPrincipal::eliminar_tarea() {
     }
 }
 
-
 //----------------------------------------------Funciones escenciales--------------------------------------//
 
 
@@ -1053,53 +1039,6 @@ void VentanaPrincipal::eliminar_tarea() {
         }
         std::cout << std::endl;
     }
-
-
-    void VentanaPrincipal::actualizarNombreEnGrafo(const String& nombreOriginal, const String& nuevoNombre) {
-        NodoTarea* nodo = grafo.buscarNodoPorNombre(nombreOriginal);
-        if (nodo) {
-            nodo->getTarea().setNombre(nuevoNombre);
-        }
-    }
-
-    void VentanaPrincipal::actualizarDuracionEnGrafo(const String& nombre, int nuevaDuracion) {
-        NodoTarea* nodo = grafo.buscarNodoPorNombre(nombre);
-        if (nodo) {
-            nodo->getTarea().setDuracion(nuevaDuracion);
-        }
-    }
-
-    void VentanaPrincipal::actualizarRecursosEnGrafo(const String& nombre, String** nuevosRecursos) {
-        NodoTarea* nodo = grafo.buscarNodoPorNombre(nombre);
-        if (nodo) {
-            nodo->getTarea().setRecursos(nuevosRecursos);
-        }
-    }
-
-    void VentanaPrincipal::mostrarGrafo() {
-        std::cout << "Estado actual del grafo de tareas:" << std::endl;
-
-        NodoLista* actual = grafo.getNodos(); // Acceder al inicio de la lista de nodos
-        while (actual) {
-            NodoTarea& nodo = actual->getTarea();
-            Tarea& tarea = nodo.getTarea();
-
-            std::cout << "Tarea: " << tarea.getNombre().mostrarCadena() << std::endl;
-            std::cout << "Duración: " << tarea.getDuracion() << " horas" << std::endl;
-            std::cout << "Recursos: ";
-            for (int i = 0; i < tarea.getCantidadRecursos(); ++i) {
-                std::cout << tarea.getRecursos()[i]->mostrarCadena();
-                if (i < tarea.getCantidadRecursos() - 1) {
-                    std::cout << ", ";
-                }
-            }
-            std::cout << std::endl;
-            std::cout << std::endl << "--------------------------" << std::endl;
-
-            actual = actual->getSiguiente();
-        }
-    }
-
 
 //------------------------------------------------------------------Auxiliar----------------------------//
 
