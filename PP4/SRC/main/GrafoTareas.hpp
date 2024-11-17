@@ -90,20 +90,17 @@ public:
         }
     }
 
+
     void mostrarGrafo() {
-        std::cout << "Mostrando el grafo de tareas..." << std::endl;
-        std::cout << "Cantidad de nodos: " << cantidadNodos << std::endl;
         for (int i = 0; i < cantidadNodos; i++) {
-            if (nodos[i] != nullptr) {
-                std::cout << "Nodo " << i << ": " 
-                          << nodos[i]->getTarea()->getNombre().mostrarCadena() << std::endl;
-            } else {
-                std::cout << "Nodo " << i << ": nullptr" << std::endl;
+            Nodo* nodo = nodos[i];
+            std::cout << "Tarea ID: " << i << " - Nombre: " << nodo->getTarea()->getNombre().c_str() << "\n";
+
+            for (int j = 0; j < nodo->getCantidadDependencias(); j++) {
+                std::cout << "  -> Depende de: " << nodo->getDependencias()[j]->getTarea()->getNombre().c_str() << "\n";
             }
         }
-        std::cout << "Fin del grafo." << std::endl;
     }
-
 
 };
 
