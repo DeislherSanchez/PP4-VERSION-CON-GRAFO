@@ -1,5 +1,5 @@
 #include <gtkmm.h>
-#include "/home/jahir/Documents/PP4/SRC/views/gestorTareas.h"
+#include "/home/jahir/Downloads/PP4/SRC/views/gestorTareas.h"
 
 int main(int argc, char* argv[])
 {

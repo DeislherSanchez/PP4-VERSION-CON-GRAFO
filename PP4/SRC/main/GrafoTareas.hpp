@@ -90,7 +90,7 @@ public:
         }
     }
 
-    void GrafoDeTareas::mostrarGrafo() {
+    void mostrarGrafo() {
         std::cout << "Mostrando el grafo de tareas..." << std::endl;
         std::cout << "Cantidad de nodos: " << cantidadNodos << std::endl;
         for (int i = 0; i < cantidadNodos; i++) {

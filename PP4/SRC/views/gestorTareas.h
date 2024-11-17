@@ -1,9 +1,9 @@
 #ifndef VENTANA_PRINCIPAL_H
 #define VENTANA_PRINCIPAL_H
 
-#include "/home/jahir/Documents/PP4/SRC/main/String.hpp"
-#include "/home/jahir/Documents/PP4/SRC/main/Tareas.hpp"
-#include "/home/jahir/Documents/PP4/SRC/main/GrafoTareas.hpp"
+#include "/home/jahir/Downloads/PP4/SRC/main/String.hpp"
+#include "/home/jahir/Downloads/PP4/SRC/main/Tareas.hpp"
+#include "/home/jahir/Downloads/PP4/SRC/main/GrafoTareas.hpp"
 #include <regex>
 #include <gtkmm.h>
 
