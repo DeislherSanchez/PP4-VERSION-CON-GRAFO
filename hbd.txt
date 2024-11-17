@@ -1,1 +1,2 @@
-g++ -o gestion_tareas main.cpp AreaDibujoGrafo.cpp `pkg-config gtkmm-4.0 --cflags --libs`
+g++ -o gestion_tareas main.cpp `pkg-config gtkmm-4.0 --cflags --libs`
+
